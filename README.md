@@ -1,6 +1,6 @@
 ### README.md - Yavuzlar PHP Shell
 
-![Yavuzlar PHP Shell Logo](https://i.hizliresim.com/hw0i7sb.png)
+![Yavuzlar PHP Shell Logo](https://raw.githubusercontent.com/naciblc/Yavuzlar/refs/heads/main/yavuzlar-yatay-url-stroke.png)
 
 ---
 
@@ -35,9 +35,6 @@ Katkıda bulunmak isteyenler:
 - Projeyi forklayıp geliştirmelerinizi yapabilirsiniz.
 - İyileştirme önerilerinizi ve hata bildirimlerinizi `issue` açarak paylaşabilirsiniz.
 
-### Yazar Hakkında
-
-Bu proje, **Naci Balcı** tarafından oluşturulmuş ve geliştirilmiştir.
 
 ---
 
@@ -72,8 +69,6 @@ If you want to contribute:
 - Fork the project and make your improvements.
 - Report issues and submit improvement suggestions via `issues`.
 
-### About the Author
 
-This project was created and developed by **Naci Balcı**.
 
 ---
