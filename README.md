@@ -16,7 +16,7 @@
 
 - **File Manager**: Supports file uploading, editing, deleting, and downloading.
 - **Terminal**: Provides command line access via a web-based terminal.
-- **Reverse Shell**: Allows reverse shell connections using `curl`, `bash`, and `python`.
+- **Reverse Shell**: Allows reverse shell connections using `nc`, `bash`, and `python`.
 - **Directory Navigation**: Navigate forward and backward through all directories, and view file permissions.
 - **Security**: Users must log in before performing any file operations.
 
@@ -49,7 +49,7 @@ If you want to contribute:
 
 - **Dosya Yöneticisi**: Dosya yükleme, düzenleme, silme ve indirme işlemlerini destekler.
 - **Terminal**: Web tabanlı terminal ile komut satırı erişimi sağlar.
-- **Ters Shell**: `curl`, `bash` ve `python` kullanarak ters shell bağlantıları kurabilirsiniz.
+- **Ters Shell**: `nc`, `bash` ve `python` kullanarak ters shell bağlantıları kurabilirsiniz.
 - **Dizin Gezintisi**: Tüm dizinler arasında ileri ve geri hareket edebilir, dosya izinlerini görebilirsiniz.
 - **Güvenlik**: Dosya işlemleri yapabilmek için giriş yapılması gereklidir.
 
