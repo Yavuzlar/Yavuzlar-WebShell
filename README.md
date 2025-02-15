@@ -5,39 +5,6 @@
 ---
 ![Yavuzlar PHP Shell GİF](https://github.com/naciblc/Yavuzlar/blob/main/Task-5/ba%C5%9Fl%C4%B1ks%C4%B1z.GIF)
 ---
-## Türkçe
-
-### Yavuzlar PHP Shell Nedir?
-
-**Yavuzlar PHP Shell**, bir web tabanlı shell ortamı sağlayarak dosya yönetimi, terminal erişimi ve ters shell işlemleri gibi özellikler sunan bir PHP projesidir. Bu shell, özellikle web sunucularında uzaktan yönetim ve dosya işlemleri gerçekleştirmek isteyenler için tasarlanmıştır.
-
-### Özellikler
-
-- **Dosya Yöneticisi**: Dosya yükleme, düzenleme, silme ve indirme işlemlerini destekler.
-- **Terminal**: Web tabanlı terminal ile komut satırı erişimi sağlar.
-- **Ters Shell**: `curl`, `bash` ve `python` kullanarak ters shell bağlantıları kurabilirsiniz.
-- **Dizin Gezintisi**: Tüm dizinler arasında ileri ve geri hareket edebilir, dosya izinlerini görebilirsiniz.
-- **Güvenlik**: Dosya işlemleri yapabilmek için giriş yapılması gereklidir.
-
-### Varsayılan Giriş Bilgileri
-
-- **Kullanıcı Adı**: `admin`
-- **Şifre**: `yavuz`
-
-### Kullanım
-
-1. Web tarayıcısı üzerinden shell'e erişin.
-2. Giriş yaptıktan sonra dosya yöneticisi, terminal ve ters shell gibi özelliklere erişebilirsiniz.
-3. Arayüz üzerinden dosya düzenleme, silme ve yükleme işlemlerini kolayca gerçekleştirin.
-
-### Katkıda Bulunma
-
-Katkıda bulunmak isteyenler:
-- Projeyi forklayıp geliştirmelerinizi yapabilirsiniz.
-- İyileştirme önerilerinizi ve hata bildirimlerinizi `issue` açarak paylaşabilirsiniz.
-
-
----
 
 ## English
 
@@ -70,6 +37,35 @@ If you want to contribute:
 - Fork the project and make your improvements.
 - Report issues and submit improvement suggestions via `issues`.
 
-
-
 ---
+
+## Türkçe
+
+### Yavuzlar PHP Shell Nedir?
+
+**Yavuzlar PHP Shell**, bir web tabanlı shell ortamı sağlayarak dosya yönetimi, terminal erişimi ve ters shell işlemleri gibi özellikler sunan bir PHP projesidir. Bu shell, özellikle web sunucularında uzaktan yönetim ve dosya işlemleri gerçekleştirmek isteyenler için tasarlanmıştır.
+
+### Özellikler
+
+- **Dosya Yöneticisi**: Dosya yükleme, düzenleme, silme ve indirme işlemlerini destekler.
+- **Terminal**: Web tabanlı terminal ile komut satırı erişimi sağlar.
+- **Ters Shell**: `curl`, `bash` ve `python` kullanarak ters shell bağlantıları kurabilirsiniz.
+- **Dizin Gezintisi**: Tüm dizinler arasında ileri ve geri hareket edebilir, dosya izinlerini görebilirsiniz.
+- **Güvenlik**: Dosya işlemleri yapabilmek için giriş yapılması gereklidir.
+
+### Varsayılan Giriş Bilgileri
+
+- **Kullanıcı Adı**: `admin`
+- **Şifre**: `yavuz`
+
+### Kullanım
+
+1. Web tarayıcısı üzerinden shell'e erişin.
+2. Giriş yaptıktan sonra dosya yöneticisi, terminal ve ters shell gibi özelliklere erişebilirsiniz.
+3. Arayüz üzerinden dosya düzenleme, silme ve yükleme işlemlerini kolayca gerçekleştirin.
+
+### Katkıda Bulunma
+
+Katkıda bulunmak isteyenler:
+- Projeyi forklayıp geliştirmelerinizi yapabilirsiniz.
+- İyileştirme önerilerinizi ve hata bildirimlerinizi `issue` açarak paylaşabilirsiniz.
