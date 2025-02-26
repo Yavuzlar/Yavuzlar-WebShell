@@ -1,87 +1,45 @@
-### README.md - Yavuzlar PHP Shell
+# Yavuzlar Webshell License
+**Copyright (c) 2025 Yavuzlar**
 
-![Yavuzlar PHP Shell Logo](https://i.hizliresim.com/hw0i7sb.png)
+This software is provided under the following terms and conditions:
 
----
+1. **Usage Restrictions:**
+   - This software is licensed for personal, educational, and ethical security research purposes only.
+   - Unauthorized use of this software to compromise systems, gain unauthorized access, or conduct any illegal activity is strictly prohibited.
+   - Commercial use, including selling, sublicensing, or distributing the software for profit, is not allowed.
 
-## Türkçe
+2. **Modification and Redistribution:**
+   - Redistribution of this software, whether modified or unmodified, is not permitted without explicit written consent from the author.
+   - Derivative works based on this software are not allowed without prior permission.
 
-### Yavuzlar PHP Shell Nedir?
+3. **Liability Disclaimer:**
+   - This software is provided "AS IS," without any express or implied warranty.
+   - The author is not responsible for any misuse of this software, including but not limited to illegal activities, unauthorized access, or damage to systems.
 
-**Yavuzlar PHP Shell**, bir web tabanlı shell ortamı sağlayarak dosya yönetimi, terminal erişimi ve ters shell işlemleri gibi özellikler sunan bir PHP projesidir. Bu shell, özellikle web sunucularında uzaktan yönetim ve dosya işlemleri gerçekleştirmek isteyenler için tasarlanmıştır.
-
-### Özellikler
-
-- **Dosya Yöneticisi**: Dosya yükleme, düzenleme, silme ve indirme işlemlerini destekler.
-- **Terminal**: Web tabanlı terminal ile komut satırı erişimi sağlar.
-- **Ters Shell**: `curl`, `bash` ve `python` kullanarak ters shell bağlantıları kurabilirsiniz.
-- **Dizin Gezintisi**: Tüm dizinler arasında ileri ve geri hareket edebilir, dosya izinlerini görebilirsiniz.
-- **Güvenlik**: Dosya işlemleri yapabilmek için giriş yapılması gereklidir.
-
-### Varsayılan Giriş Bilgileri
-
-- **Kullanıcı Adı**: `admin`
-- **Şifre**: `yavuz`
-
-### Kullanım
-
-1. Web tarayıcısı üzerinden shell'e erişin.
-2. Giriş yaptıktan sonra dosya yöneticisi, terminal ve ters shell gibi özelliklere erişebilirsiniz.
-3. Arayüz üzerinden dosya düzenleme, silme ve yükleme işlemlerini kolayca gerçekleştirin.
-
-### Katkıda Bulunma
-
-Katkıda bulunmak isteyenler:
-- Projeyi forklayıp geliştirmelerinizi yapabilirsiniz.
-- İyileştirme önerilerinizi ve hata bildirimlerinizi `issue` açarak paylaşabilirsiniz.
-
-### Yazar Hakkında
-
-Bu proje, **Naci Balcı** tarafından oluşturulmuş ve geliştirilmiştir.
-
-### Lisans
-
-Bu proje, **Yavuzlar Webshell Lisansı** altında lisanslanmıştır. Lisans ile ilgili daha fazla bilgi için `LICENSE` dosyasını inceleyebilirsiniz.
+4. **Ethical Use Notice:**
+   - Users of this software must comply with all applicable laws and regulations.
+   - By using this software, you agree to take full responsibility for its use and ensure it is employed for ethical and legal purposes only.
 
 ---
 
-## English
+# Yavuzlar Webshell Lisansı
+**Telif Hakkı (c) 2025 Yavuzlar**
 
-### What is Yavuzlar PHP Shell?
+Bu yazılım aşağıdaki şartlar ve koşullar altında sağlanmaktadır:
 
-**Yavuzlar PHP Shell** is a web-based shell environment that provides features such as file management, terminal access, and reverse shell operations. It is designed for those who need to manage files and execute commands on web servers remotely.
+1. **Kullanım Kısıtlamaları:**
+   - Bu yazılım yalnızca kişisel, eğitimsel ve etik güvenlik araştırmaları amacıyla kullanılabilir.
+   - Bu yazılımın sistemleri ele geçirmek, izinsiz erişim sağlamak veya herhangi bir yasa dışı faaliyette bulunmak için kullanılması kesinlikle yasaktır.
+   - Yazılımın ticari kullanımı (satış, alt lisanslama veya dağıtım dahil) yasaktır.
 
-### Features
+2. **Değiştirme ve Yeniden Dağıtım:**
+   - Bu yazılımın değiştirilmiş veya değiştirilmemiş hallerinin, yazarın açık yazılı izni olmaksızın yeniden dağıtılması yasaktır.
+   - Bu yazılım temel alınarak türev çalışmalar oluşturmak, önceden izin alınmadan mümkün değildir.
 
-- **File Manager**: Supports file uploading, editing, deleting, and downloading.
-- **Terminal**: Provides command line access via a web-based terminal.
-- **Reverse Shell**: Allows reverse shell connections using `curl`, `bash`, and `python`.
-- **Directory Navigation**: Navigate forward and backward through all directories, and view file permissions.
-- **Security**: Users must log in before performing any file operations.
+3. **Sorumluluk Reddi:**
+   - Bu yazılım "OLDUĞU GİBİ" sağlanmaktadır ve açık veya zımni hiçbir garanti verilmez.
+   - Yazar, bu yazılımın kötüye kullanılması, yasa dışı faaliyetler veya sistemlere verilen zararlardan sorumlu değildir.
 
-### Default Login Information
-
-- **Username**: `admin`
-- **Password**: `yavuz`
-
-### Usage
-
-1. Access the shell through a web browser.
-2. Once logged in, you can access the file manager, terminal, and reverse shell features.
-3. Easily perform file editing, deletion, and uploading via the interface.
-
-### Contributing
-
-If you want to contribute:
-- Fork the project and make your improvements.
-- Report issues and submit improvement suggestions via `issues`.
-
-### About the Author
-
-This project was created and developed by **Naci Balcı**.
-
-### License
-
-This project is licensed under the **Yavuzlar Webshell License**. For more information about the license, please refer to the `LICENSE` file.
-
----
+4. **Etik Kullanım Bildirimi:**
+   - Bu yazılımı kullananlar, geçerli yasa ve düzenlemelere uymalıdır.
+   - Bu yazılımı kullanarak, yalnızca etik ve yasal amaçlarla kullanacağınızı kabul etmiş olursunuz.
